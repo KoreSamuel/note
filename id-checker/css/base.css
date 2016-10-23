@@ -1,0 +1,44 @@
+*{
+    margin: 0;
+    padding: 0;
+    }
+    body{
+        background: #f0f4f7
+    }
+    .container{
+        margin:300px auto;
+        text-align:center;
+    }
+        h1{
+            margin-bottom: 30px;
+            font-size: 50px
+        }
+        input{
+            height: 30px;
+            line-height: 30px;
+            font-size: 18px;
+            outline: none;
+        }
+        input[type='text']{
+            border: 1px solid #34d1f2;
+            padding-left: 10px;
+            border-radius: 15px 0 0 15px;
+            width: 500px;
+        }
+        .check-btn{
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 0 15px 15px 0;
+            background-color: #34d1f2;
+            width: 80px;
+            padding:0 5px;
+            margin-left:-8px;
+            color: #fff;
+            cursor:pointer;
+        }
+        .tips{
+            display: block;
+            color: red;
+            font-size:20px;
+        }
