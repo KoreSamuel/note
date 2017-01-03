@@ -6,31 +6,31 @@
  * UrlUtils.replaceUrlParameter(window.location.href, 'query', 'svn');
  */
 define(function (require, exports, module) {
-	var UrlUtils = {
-		getUrlParameter: function (url, parameter) {
-			var reg = new RegExp('(^|&)'+ parameter + '=([^&]*)(&|$)');
-			var r = url.substr(url.indexOf('\?')+1).match(reg);
-			
-			if (r != null) {
-				return unescape(r[2]);
-			}
-			return null;
-		},
-		replaceUrlParameter: function (url, parameter, value) {
-			var reg = new RegExp('(^|)' + parameter + '=([^&]*)(|$)');
-			var tmp = parameter + '=' + value;
-			
-			if (url.match(reg) != null) {
-				return url.replace(eval(reg), tmp);
-			} else {
-				if (url.match('[\?]')) {
-					return url + '&' + tmp;
-				} else {
-					return url+ '?' + tmp;
-				}
-			}
-		}
-	};
+    var UrlUtils = {
+        getUrlParameter: function (url, parameter) {
+            var reg = new RegExp('(^|&)'+ parameter + '=([^&]*)(&|$)');
+            var r = url.substr(url.indexOf('\?')+1).match(reg);
 
-	module.exports = UrlUtils;
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        },
+        replaceUrlParameter: function (url, parameter, value) {
+            var reg = new RegExp('(^|)' + parameter + '=([^&]*)(|$)');
+            var tmp = parameter + '=' + value;
+
+            if (url.match(reg) != null) {
+                return url.replace(eval(reg), tmp);
+            } else {
+                if (url.match('[\?]')) {
+                    return url + '&' + tmp;
+                } else {
+                    return url+ '?' + tmp;
+                }
+            }
+        }
+    };
+
+    module.exports = UrlUtils;
 });
