@@ -1,0 +1,45 @@
+// 1.--------------------------------------
+$color: #000;
+
+body {
+    color: $color;
+}
+
+// 2. -----------------------------------------
+aside {
+    ul {
+        margin: 0;
+    }
+    a {
+        color: red;
+    }
+}
+// 3. ---------------------------------------------
+@import 'reset';
+body {
+    color: $color;
+}
+// 4. --------------------------------------------
+@mixin border($thickness) {
+    border-width: $thickness;
+}
+img { @include border(10px); }
+
+// 5. --------------------------------------------
+@mixin border-thickness($thickness) {
+    border-width: $thickness;
+    @content;
+}
+img {
+    @include border-thickness(10px){
+        border-style: solid;
+    }
+}
+// 6. -------------------------------
+.push-button {
+    background-color: blue;
+}
+.main-button {
+    @extend .push-button;
+    font-weight: bold;
+}
