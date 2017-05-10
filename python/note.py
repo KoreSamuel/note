@@ -172,5 +172,17 @@ def person(name, age, **kw):
 >>> extra = {'weight': 40, 'height': 140};
 >>> person('xiaogang', 15, **extra)
 {'name': 'xiaogang', 'age': 15, 'else': {'weight': 40, 'height': 140}};
-# 命名关键字参数
+# 命名关键字参数，限制关键字参数名字
 # next start http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431752945034eb82ac80a3e64b9bb4929b16eeed1eb9000 
+# 如只接收 city job关键字  
+def person(name, age, *, city, job): # 命名关键字参数需要一个特殊分隔符*，*后面的参数被视为命名关键字参数
+	return name, age, city, job
+>>> person('xiaojie', 23, city='beijing', job='engineer') # 参数必须传完
+('xiaojie', 23, 'beijing', 'engineer')
+# 如果参数中已有可变参数，则可以不加*
+def person(name, age, *args, city, job): #city, job同样为命名关键字参数
+    return name, age, args, city, job
+>>> person('xiaoqing', 22, city='shanghai', 'lalala')
+('xiaoqing', 22, (), 'shanghai', 'lalala') #可变参数若不传，则是一个空的tuple
+# 命名关键字参数同样可以有默认值
+# 参数组合：可以用必选参数、默认参数、可变参数、关键字参数和命名关键字参数，这5种参数都可以组合使用。但是请注意，参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。
