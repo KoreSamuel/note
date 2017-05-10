@@ -111,4 +111,5 @@ def fib(num):
 # 每次调用next()的时候执行，遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行
 
 # http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/00143178254193589df9c612d2449618ea460e7a672a366000
-
+# 迭代器 Iterator，可以直接用for循环的对象，next()不断返回下一个值，isinstance(obj, Iterator)
+# list dict str 虽然是 Iterable，但不是Iterator，iterable可通过iter()转换成iterator
