@@ -1,6 +1,10 @@
 # !/usr/bin/env python3
 # -*- coding utf-8 -*-
-# 1 and or not,与或非运算,bool值True,False
+# 1 and or not,与或非运算,bool值True,False ,**指数运算 '_'变量，用于存放交互模式中上次计算的结果
+>>> 2**3
+8
+>>> _
+8
 # 2 // 地板除，整除,eg:
 >>> print(10 // 3)
 3
@@ -9,7 +13,7 @@
 65
 >>> chr(66)
 'B'
-# 4 str.encode(type), str.decode('type')
+# 4 str.encode(type), str.decode('type'), str*n :str重复n次
 >>>'中文'.encode('utf-8')
 b'\xe4\xb8\xad\xe6\x96\x87'
 >>> b'\xe4\xb8\xad\xe6\x96\x87'.decode('utf-8')
@@ -36,9 +40,11 @@ b'\xe4\xb8\xad\xe6\x96\x87'
 ['apple', 'grape', 'pear', 'banana', 'orange']
 # 删， 若无参数，则默认最后一个，有参数则删除指定位置
 >>> fruit.pop()
+# popLeft() 弹出第一个
 'orange'
 >>> fruit
 ['apple', 'grape', 'pear', 'banana']
+# same to fruit.remove('orange')
 # 改
 >>> fruit[2] = 'orange'
 >>> fruit
@@ -55,6 +61,8 @@ b'\xe4\xb8\xad\xe6\x96\x87'
 >>> t = (1)
 >>> t
 1
+# list 其他常用方法 sort(), count(item),reserve(), copy() == [:]
+# list, tuple ,str 都支持通过 '+' 连接
 # 7 条件判断if else; if elif else
 age = 18
 if age >= 18:
@@ -65,11 +73,12 @@ else:
 	print('nothing')
 # next start 
 
-# 8 for x in [1,2,3] ; range(5) >>> range(0, 5); range(3,5) >>> range(3,5);
+# 8 for x in [1,2,3] ; range(5) ==> range(0, 5); range(3,5) ==> range(3,5); range(10, 2, -2) ==> 10, 8, 6, 4
 >>> list(range(5))
 [0, 1, 2, 3, 4]
 >>> list(rane(3, 5))
 [3, 4]
+# 同时遍历两个或多个序列 for a, b in zip(A, B)
 
 # 9 字典 dict >>> key-value键值对, key为不可变，整数/字符串可以当作key
 >>> someone = {'name': 'xiaoming', 'age': 12, 'sex': 'boy'}
@@ -84,10 +93,19 @@ False
 >>> someone.get('height', -1)
 -1
 # 删除某个属性，pop(key) ,return 对应的key的value，eg：
->>> someone.pop('weight')
+>>> someone.pop('weight') # 或者 del someone['weight']
 50
 >>> someone
 {'name': 'xiaoming', 'age': 12, 'sex': 'boy'}
+# 构建字典
+>>> dict([('sape', 4139), ('guido', 4127), ('jack', 4098)])
+{'jack': 4098, 'sape': 4139, 'guido': 4127}
+
+>>> {x: x**2 for x in (2, 4, 6)}
+{2: 4, 4: 16, 6: 36}
+
+>>> dict(sape=4139, guido=4127, jack=4098)
+{'jack': 4098, 'sape': 4139, 'guido': 4127}
 
 # 10 set key的集合，无value，无重复key，创建一个set需要一个list集合作为参数,同dict,不可放入可变对象
 >>> s = set([1, 2, 3, 4]);
@@ -103,13 +121,27 @@ False
 >>> s.remove(4)
 >>> s
 {1, 2, 3, 5}
-# 交集'&'  并集'|'   操作
+# 交集'&'  并集'|'  差集 '-' 操作
 >>> s1 = set([1, 2, 4])
 >>> s2 = set([2, 3, 4]);
 >>> s1 & s2
 {2, 4}
 >>> s1 | s2
 {1, 2, 3, 4}
+>>> a = set('avsfsfewgxac')
+>>> a
+{'c', 'a', 'v', 'g', 'w', 'e', 's', 'x', 'f'}
+>>> b = set('advdvvxdagege')
+>>> b
+{'a', 'v', 'd', 'g', 'e', 'x'}
+>>> a - b
+{'f', 'w', 'c', 's'}
+>>> a | b
+{'v', 's', 'x', 'f', 'c', 'a', 'd', 'g', 'w', 'e'}
+>>> a & b
+{'a', 'v', 'g', 'e', 'x'}
+>>> a ^ b # a b 不共有的
+{'c', 'd', 'w', 's', 'f'}
 
 # 11 函数abs() max() int() float() str() bool()
 >>> abs(-3)
