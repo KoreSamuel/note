@@ -23,7 +23,7 @@ def add(x, y):
 # 例如去除序列中的偶数
 def is_odd(n):
     return n % 2 == 1
->>> list(filter(is_odd, [1, 2, 3, 4, 5, 6, 7, 8, 9 10])) #注意到filter()函数返回的是一个Iterator
+>>> list(filter(is_odd, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) #注意到filter()函数返回的是一个Iterator
 [1, 3, 5, 7, 9]
 # sorted(iterable, cmp=None, key=None, reverse=False)
 >>> sorted([34,2,56,33,21])
@@ -49,4 +49,20 @@ def sort_byscore(t):
 >>> sorted(L, key=sort_byscore, reverse=True)
 [('Adam', 92), ('Lisa', 88), ('Bob', 75), ('Bart', 66)]
 # 返回函数
-# http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431835236741e42daf5af6514f1a8917b8aaadff31bf000
+# 函数内定义函数，内部函数可以访问外部函数的变量，并将内部函数作为返回值返回，相关变量和参数都被保留在返回函数中，==> '闭包'
+# 该函数并未执行，返回函数中不要引用任何可能会变化的变量，类似JavaScript中的闭包
+def count():
+    fn = []
+    for i in range(1, 4):
+        def f():
+            return i**2
+        fn.append(f)
+    return fn
+>>>f1, f2, f3 = count()
+>>>f1()
+9
+>>> f2()
+9
+>>>f3()
+9
+# 返回的函数引用了变量i，但它并非立刻执行。等到3个函数都返回时，它们所引用的变量i已经变成了3，因此最终结果为9
