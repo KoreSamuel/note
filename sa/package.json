@@ -1,0 +1,24 @@
+{
+  "name": "sa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  },
+  "author": "xiaoj",
+  "license": "MIT",
+  "dependencies": {
+    "color": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-preset-latest": "^6.24.1",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2"
+  }
+}
