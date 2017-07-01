@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>petal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #canvas {
+            background-image: url(./imgs/BG0.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        //初始变量
+        var canvas = document.getElementById("canvas");
+        var canvasHeight = 0;
+        var canvasHeight = 0;
+        var ctx = canvas.getContext('2d');
+        var petals = [];
+        var width = 0;
+        var height = 0;
+        var bgIndex = 0;
+
+        var Petal = function (px, py) {
+            this.x = this.y = this.dx = this.dy = 0;
+            this.image = genFlower();
+            this.reset(px, py);
+        }
+        Petal.prototype.reset = function (px, py) {
+            this.y = py;
+            this.x = px;
+            this.dx = (Math.random() * 1) - 0.5;
+            this.dy = (Math.random() * 0.8) + 0.5;
+        }
+        function createPetals(cnt, px, py) {
+            if (cnt != petals.lenth) {
+                // petals = [];
+                while (cnt--) {
+                    petals.push(new Petal(px, py));
+                }
+            }
+        }
+        function updatePetals() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            petals.forEach(function (p) {
+                p.y += p.dy;
+                p.x += p.dx;
+                p.image.onload = function () {
+                    ctx.drawImage(p.image, p.x, p.y)
+                }
+                ctx.drawImage(p.image, p.x, p.y)
+            });
+            window.requestAnimationFrame(updatePetals);
+        }
+
+        //requestAnimationFrame 兼容
+        window.requestAnimationFrame =
+            window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+
+        window.addEventListener("resize", resizeCanvas, false);
+        // window.addEventListener('load', changebg, false);
+        canvas.addEventListener('touchstart', draw, false);
+        canvas.addEventListener('touchmove', draw, false);
+        canvas.addEventListener('mouseover', draw, false)
+        window.onload = function () {
+            setInterval(function () {
+                canvas.setAttribute('style', 'background-image:url(./imgs/BG' + (++bgIndex % 3) + '.jpg)');
+                console.log(canvas.style.a)
+            }, 8000);
+        }
+        function draw(e) {
+            if (e) {
+                touch = e.touches[0]
+                px = touch.pageX;
+                py = touch.pageY;
+                createPetals(1, px, py);
+            }
+        }
+
+        function resizeCanvas() {
+            if (!!canvas) {
+                canvasHeight = canvas.height = window.innerHeight;
+                canvasWidth = canvas.width = window.innerWidth;
+            }
+        }
+
+
+        function genFlower() {
+            var img = ['./imgs/f1.png', './imgs/f2.png', './imgs/f3.png', './imgs/f4.png'];
+            var index = Math.floor(Math.random() * img.length);
+            var imgObj = new Image();
+            imgObj.src = img[index];
+            return imgObj
+        }
+        resizeCanvas()
+        updatePetals()
+    </script>
+</body>
+
+</html>
