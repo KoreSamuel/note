@@ -19,7 +19,7 @@
         }
 
         #canvas {
-            background-image: url(./imgs/BG0.jpg);
+            background-image: url(./imgs/bg0.jpg);
             background-repeat: no-repeat;
             background-size: cover;
             position: fixed;
@@ -95,7 +95,7 @@
         canvas.addEventListener('mouseover', draw, false)
         window.onload = function () {
             setInterval(function () {
-                canvas.setAttribute('style', 'background-image:url(./imgs/BG' + (++bgIndex % 3) + '.jpg)');
+                canvas.setAttribute('style', 'background-image:url(./imgs/bg' + (++bgIndex % 3) + '.jpg)');
                 console.log(canvas.style.a)
             }, 8000);
         }
