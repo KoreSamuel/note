@@ -13,7 +13,9 @@
             overflow: hidden;
         }
 
+        html,
         body {
+            height: 100%;
             overflow: hidden;
             -webkit-overflow-scrolling: touch;
         }
@@ -42,17 +44,17 @@
         }
 
         #bg1 {
-            background: url(./imgs/bg0.jpg) no-repeat;
+            /*background: url(./imgs/bg0.jpg) no-repeat;*/
             background-size: cover;
         }
 
         #bg2 {
-            background: url(./imgs/bg1.jpg) no-repeat;
+            /*background: url(./imgs/bg1.jpg) no-repeat;*/
             background-size: cover;
         }
 
         #bg3 {
-            background: url(./imgs/bg2.jpg) no-repeat;
+            /*background: url(./imgs/bg2.jpg) no-repeat;*/
             background-size: cover;
         }
 
@@ -68,6 +70,65 @@
             to {
                 transform: rotate(1turn) translateY(-150px) translateY(50%) rotate(0turn);
             }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .animated {
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
         }
 
         .avatar {
@@ -92,19 +153,91 @@
             height: 400px;
             margin: 100px auto;
         }
+
+        .alert-layer {
+            position: fixed;
+            display: none;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, .8);
+            -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+        }
+
+        .alert-layer .main {
+            width: 320px;
+            margin: 80px auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .wolf {
+            -webkit-animation-name: fadeInLeft;
+            animation-name: fadeInLeft;
+            animation-delay: .5s;
+            -webkit-animation-delay: .5s;
+        }
+
+        .fish {
+            position: relative;
+            left: 130px;
+            bottom: 220px;
+            -webkit-animation-name: fadeInRight;
+            animation-name: fadeInRight;
+            animation-delay: 1.5s;
+            -webkit-animation-delay: 1.5s;
+        }
+
+        .bottom {
+            position: relative;
+            top: -180px;
+            text-align: center;
+            -webkit-animation-name: fadeInDown;
+            animation-name: fadeInDown;
+            animation-delay: 2.5s;
+            -webkit-animation-delay: 2.5s;
+        }
+
+        .bottom a {
+            display: block;
+            height: 60px;
+            background: url(./imgs/button.png) no-repeat;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
     </style>
 </head>
 
 <body>
+    <!--手势提示-->
     <div class="path">
         <img src="./imgs/finger.png" class="avatar" />
     </div>
+    <!--背景图-->
     <div id="imgs">
-        <div id="bg1" class="bg"></div>
-        <div id="bg2" class="bg"></div>
-        <div id="bg3" class="bg fadein"></div>
+        <img id="bg1" src="./imgs/bg0.jpg" class="bg" />
+        <img id="bg2" src="./imgs/bg1.jpg" class="bg" />
+        <img id="bg3" src="./imgs/bg2.jpg" class="bg fadein" />
     </div>
+    <!--花瓣掉落canvas-->
     <canvas id="canvas"></canvas>
+    <!--下载图层-->
+    <aside class='alert-layer animated'>
+        <div class="main">
+            <p class="top">
+                <img src="./imgs/wolf.png" class="wolf animated" alt="wolf">
+                <img src="./imgs/fish.png" class="fish animated" alt="fish">
+            </p>
+            <p class="bottom animated">
+                <a href="http://dearxiaojie.xyz"></a>
+            </p>
+        </div>
+    </aside>
     <script>
         //requestAnimationFrame 兼容
         window.requestAnimationFrame =
@@ -159,7 +292,7 @@
 
         function draw(e) {
             // 控制花瓣掉落数量
-            var count =Math.random() > 0.3 ? 1 : 0;
+            var count = Math.random() > 0.3 ? 1 : 0;
             if (e.touches) {
                 touch = e.touches[0]
                 px = touch.pageX;
@@ -210,18 +343,27 @@
                 cur_img--;
             }
         }
+        function showButton() {
+            document.querySelector('.alert-layer').style.display = 'block';
+        }
 
-        window.addEventListener("resize", resizeCanvas, false);
-        canvas.addEventListener('touchstart', draw, false);
-        window.addEventListener('touchstart', function () {
+        function hideGuide() {
             document.querySelector('.path').style.display = 'none'
-        }, false);
+        }
+
+        function initPage() {
+            resizeCanvas()
+            setInterval(turnImgs, 2500);
+            updatePetals()
+            setTimeout(showButton, 5000)
+        }
+        window.addEventListener("resize", resizeCanvas, false);
+        window.addEventListener('touchstart', hideGuide, false);
+        window.addEventListener('load', initPage, false);
+        canvas.addEventListener('touchstart', draw, false);
         canvas.addEventListener('touchmove', draw, false);
         canvas.addEventListener('mouseover', draw, false);
         canvas.addEventListener('mousemove', draw, false);
-        setInterval(turnImgs, 5000);
-        resizeCanvas()
-        updatePetals()
     </script>
 </body>
 
