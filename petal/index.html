@@ -19,9 +19,6 @@
         }
 
         #canvas {
-            background-image: url(./imgs/bg0.jpg);
-            background-repeat: no-repeat;
-            background-size: cover;
             position: fixed;
             top: 0;
             left: 0;
@@ -29,41 +26,88 @@
             bottom: 0;
             margin: 0 auto;
         }
+
+        .bg {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: opacity 2s linear;
+            -moz-transition: opacity 2s linear;
+            -o-transition: opacity 2s linear;
+            transition: opacity 2s linear;
+            opacity: 0;
+        }
+
+        #bg1 {
+            background: url(./imgs/bg0.jpg) no-repeat;
+            background-size: cover;
+        }
+
+        #bg2 {
+            background: url(./imgs/bg1.jpg) no-repeat;
+            background-size: cover;
+        }
+
+        #bg3 {
+            background: url(./imgs/bg2.jpg) no-repeat;
+            background-size: cover;
+        }
+
+        .fadein {
+            opacity: 1;
+            filter: alpha(opacity=1);
+        }
     </style>
 </head>
 
 <body>
+    <div id="imgs">
+        <div id="bg1" class="bg fadein"></div>
+        <div id="bg2" class="bg"></div>
+        <div id="bg3" class="bg"></div>
+    </div>
     <canvas id="canvas"></canvas>
     <script>
+        //requestAnimationFrame 兼容
+        window.requestAnimationFrame =
+            window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
         //初始变量
         var canvas = document.getElementById("canvas");
         var canvasHeight = 0;
         var canvasHeight = 0;
         var ctx = canvas.getContext('2d');
         var petals = [];
-        var width = 0;
-        var height = 0;
-        var bgIndex = 0;
 
         var Petal = function (px, py) {
             this.x = this.y = this.dx = this.dy = 0;
             this.image = genFlower();
             this.reset(px, py);
         }
+
         Petal.prototype.reset = function (px, py) {
             this.y = py;
             this.x = px;
             this.dx = (Math.random() * 1) - 0.5;
             this.dy = (Math.random() * 0.8) + 0.5;
         }
+
         function createPetals(cnt, px, py) {
             if (cnt != petals.lenth) {
-                // petals = [];
                 while (cnt--) {
                     petals.push(new Petal(px, py));
                 }
             }
         }
+
         function updatePetals() {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             petals.forEach(function (p) {
@@ -77,33 +121,16 @@
             window.requestAnimationFrame(updatePetals);
         }
 
-        //requestAnimationFrame 兼容
-        window.requestAnimationFrame =
-            window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1000 / 60);
-            };
-
-        window.addEventListener("resize", resizeCanvas, false);
-        // window.addEventListener('load', changebg, false);
-        canvas.addEventListener('touchstart', draw, false);
-        canvas.addEventListener('touchmove', draw, false);
-        canvas.addEventListener('mouseover', draw, false)
-        window.onload = function () {
-            setInterval(function () {
-                canvas.setAttribute('style', 'background-image:url(./imgs/bg' + (++bgIndex % 3) + '.jpg)');
-                console.log(canvas.style.a)
-            }, 8000);
-        }
         function draw(e) {
-            if (e) {
+            if (e.touches) {
                 touch = e.touches[0]
                 px = touch.pageX;
                 py = touch.pageY;
+                createPetals(1, px, py);
+            }
+            else if (e.clientX || e.pageX) {
+                px = e.clientX || e.pageX;
+                py = e.clientY || e.pageY;
                 createPetals(1, px, py);
             }
         }
@@ -115,7 +142,6 @@
             }
         }
 
-
         function genFlower() {
             var img = ['./imgs/f1.png', './imgs/f2.png', './imgs/f3.png', './imgs/f4.png'];
             var index = Math.floor(Math.random() * img.length);
@@ -123,6 +149,35 @@
             imgObj.src = img[index];
             return imgObj
         }
+
+        function fadeIn(e) {
+            e.className = "bg fadein"
+        };
+
+        function fadeOut(e) {
+            e.className = "bg"
+        };
+
+        cur_img = document.getElementById("imgs").children.length - 1;
+
+        function turnImgs(imgs) {
+            var imgs = document.getElementById("imgs").children;
+            if (cur_img == 0) {
+                fadeOut(imgs[cur_img]);
+                cur_img = imgs.length - 1;
+                fadeIn(imgs[cur_img]);
+            } else {
+                fadeOut(imgs[cur_img]);
+                fadeIn(imgs[cur_img - 1]);
+                cur_img--;
+            }
+        }
+        window.addEventListener("resize", resizeCanvas, false);
+        canvas.addEventListener('touchstart', draw, false);
+        canvas.addEventListener('touchmove', draw, false);
+        canvas.addEventListener('mouseover', draw, false);
+        canvas.addEventListener('mousemove', draw, false);
+        setInterval(turnImgs, 5000);
         resizeCanvas()
         updatePetals()
     </script>
