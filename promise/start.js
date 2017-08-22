@@ -41,7 +41,7 @@ getURL(URL)
     console.error(error);
   });
 
-// ## Promise.resolve
+// ## Promise.resolve 将传递给它的参数填充(filfilled) 到 promise 对象后并返回这个 promise 对象
 // new Promise() ===> Promise.resolve()
 
 Promise.resolve(110).then(function(value) {
@@ -58,3 +58,8 @@ var promise = Promise.resolve($.ajax('xxx.json'));
 promise.then(function(value) {
   console.log(value);
 });
+
+
+// Promise.all
+// Promise.all接收一个promise对象的数组为参数，当数组里的所有promise对象全部变成resolve或者reject的状态的时候，才会去调用then方法，所有的Promise同步执行
+// Promise.race参数痛Promise.all，不同在于只要有一个promise状态为resolve或reject，就会继续后面的处理
