@@ -105,3 +105,81 @@ reduceRight()
 后续看
 
 - Function() 函数是对象，函数名是指针 
+解析器在向执行环境中加载数据时，对函数声明和函数表达式并非一视同仁。解析器会率先读取函数声明，并使其在执行任何代码之前可用（可以访问）；至于函数表达式，则必须等到解析器执行到它所在的代码行，才会真正被解释执行 
+
+基本包装类型
+```
+var s1 = 'i am some text';
+var s3 = s1.substring(3)
+```
+s1是个字符串，基本类型值，但是下一行调用了substring()保存，而基本类型值不是对象，逻辑上讲应该没有方法，所以后台会进行处理：
+1、创建一个String类型的实例。2、在实例上调用指定的方法。3、销毁实例
+上述步骤同样适用于boollean和Number类型对应的布尔值和数字值
+> 使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中。而自动创建的基本包装类型的对象，则只存在于一行代码的执行瞬间，然后立即被销毁
+所以s1.color = 'red';console.log(s1.color) // undefined
+需要注意的是：var number = new Number('25')// 引用类型 和 var number = Number('25')// 基本类型
+是不一样的，分别typeof为object 和 number
+
+- Boolean
+
+- Number
+toString() 进制转换，默认10
+toFixed()保留小数位数，标准范围0~20
+toPrecision()返回有效数字位数
+
+- String
+1.字符方法 charAt(),charCodeAt()
+2.字符串方法
+concat(),连接字符串，可以接受任意多个参数
+slice()
+substring()大小无顺序，函数会取小的数字为开始位置
+substr() 
+需要注意的是，substr()第二个参数指定返回字符个数，当参数为负数时，slice将负值与字符长度相加，substr将负的第一个参数加上字符串长度，第二个为0，substring将负值都转换成0
+3.trim()
+4.replace()
+5.fromCharCode()接受一个或多个字符编码，转换成一个字符串 eg:console.log(String.fromCharCode(104, 101, 108, 108, 111)) //'hello'
+6.HTML方法
+link(url) --> <a href='url'>string</a>
+bold() --> <b>string</b>
+......
+
+单体内置对象
+Global
+encodeURI()除了空格其他字符不变，将空格替换成了%20。对应decodeURI()
+encodeURIComponent()替换所有非字母数字字符。对应decodeURIComponent()
+URI的以上两个方法替代已废弃的escape()和unescape()，不在使用废弃的方法
+eval()很可能会存在代码注入的安全问题
+......
+Window
+Math
+min()/max() 可接收任意多个参数
+ceil()进一
+floor()向下取整
+round()四舍五入
+random()
+......
+
+面向对象
+在定义只有内部采用的特性(attribute)时，描述了属性(property)的各种特征，特性放在[[]]中
+1、属性类型
+- 数据属性
+[[Configurable]]能否delete删除而重新定义、能否修改属性的特性、能否把属性修改为访问器属性，默认true
+[[Enumerable]]能否通过for-in循环返回属性，默认true
+[[Writable]]能否修改属性的值,默认true
+[[Value]]包含这个属性的数据值，读取的时候从这儿读，写入的时候将新值存在这儿，默认为undefined
+- 访问器属性
+
+Object.defineProperty(属性所在的对象，属性名字，描述符对象[configurable | enumerable | writable | value])
+```
+var person = {}
+Object.defineProperty(person, 'name', {
+    writable: false,
+    value: 'xiaojie'
+});
+console.log(person.name) // 'xiaojie'
+person.name = 'yingying';
+console.log(person.name) // 'xiaojie'
+```
+上述创建了一个name属性，值为'xiaojie'是只读的，不可修改，非严格模式下操作会被忽略，严格模式导致抛出错误
+把configurable设置成false,则调用delete不能删除，切在调用Object.defineProperty()修改处writable以外的特性都会报错。
+不指定值的话， configurable 、 enumerable 和 writable特性的默认值都是false
