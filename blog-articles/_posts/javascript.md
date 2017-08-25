@@ -167,8 +167,6 @@ random()
 [[Enumerable]]能否通过for-in循环返回属性，默认true
 [[Writable]]能否修改属性的值,默认true
 [[Value]]包含这个属性的数据值，读取的时候从这儿读，写入的时候将新值存在这儿，默认为undefined
-- 访问器属性
-
 Object.defineProperty(属性所在的对象，属性名字，描述符对象[configurable | enumerable | writable | value])
 ```
 var person = {}
@@ -183,3 +181,99 @@ console.log(person.name) // 'xiaojie'
 上述创建了一个name属性，值为'xiaojie'是只读的，不可修改，非严格模式下操作会被忽略，严格模式导致抛出错误
 把configurable设置成false,则调用delete不能删除，切在调用Object.defineProperty()修改处writable以外的特性都会报错。
 不指定值的话， configurable 、 enumerable 和 writable特性的默认值都是false
+- 访问器属性
+包含一对getter和setter属性，不一定同时指定，只指定getter意味不可写，只指定setter不可读
+[[Configurable]]能否delete删除属性从而重新定义、能否修改属性的特性、能否把属性修改为数据属性，默认为true
+[[Enumerable]]能否通过for-in循环返回属性，默认true
+[[Get]]读取属性调用，默认undefined
+[[Set]]写入属性调用，默认undefined
+访问器属性不能直接定义，必须使用Object.defineProperty()
+```
+var book = {
+    _year: 2014,
+    edition: 1
+};
+Object.defineProperty(book, 'year', {
+    get: function() {
+        return this._year
+    },
+    set: function(newValue) {
+        if (newValue > 2014) {
+            this._year = newValue;
+            this.edition += newValue - 2014;
+        }
+    }
+});
+book.year =  2017;
+console.log(book.edition); // 4
+```
+常见使用方式：设置一个属性的值会导致其他属性发生变化
+
+2.定义多个属性
+Object.defineProperties()
+```
+var book = {};
+Object.defineProperties(book, {
+    _year: {
+        value: 2014
+    },
+    edition: {
+        value: 1
+    },
+    year: {
+        get: function() {
+            return this._year
+        },
+        set: function(newValue) {
+            if (newValue > 2014) {
+                this._year = newValue;
+                this.edition += newValue - 2014;
+            }
+        }
+    }
+});
+```
+3.读取属性特性
+Object.getOwnPropertyDescriptor(属性所在对象，要读取描述符的属性名称);
+返回一个对象，若是访问器属性，则返回其四个属性，数据属性同样
+
+
+4.创建对象
+- 工厂模式
+```
+function createPerson(name, age, job) {
+    var o = new Object();
+    o.name = name;
+    o.age = age;
+    o.job = job;
+    o.sayName = function () {
+        console.log(this.name)
+    };
+    return o;
+};
+var person = createPerson('xiaojie', '24', 'fe')
+```
+- 构造函数模式
+```
+function Person(name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = function() {
+        console.log(this.name)
+    };
+};
+var person = new Person('xiaojie', 24, 'fe'); // 必须使用new，不然属性和方法被添加到window或global
+```
+相较于工厂模式
+1.没有显示创建对象
+2.直接将属性和方法赋给this
+3.没有return
+另外，若构造函数当做函数调用
+1.如上，属性和方法被添加到window或global
+2.拎一个对象的作用域中调用
+```
+var o = new Object();
+Person.call(o, 'xiaojie', 24, 'fe');
+o.sayName(); // 'xiaojie'
+构造函数的问题
