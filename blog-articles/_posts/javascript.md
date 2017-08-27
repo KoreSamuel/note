@@ -343,3 +343,32 @@ console.log(person1.hasOwnProperty('name')) // true
 只有当实例重写了name属性之后，hasOwnProperty()才返回true
 只有这时候name才是一个实例属性，而非源性属性
 2.原型与in操作符
+单独使用和在for-in中使用
+单独使用时，会在通过对象能够访问给定属性时返回true,无论该属性存在于实例还是原型
+for-in中一般和hasOwnProperty()一起使用。
+在使用 for-in 循环时，返回的是所有能够通过对象访问的、可枚举的（enumerated）属性，其中既包括存在于实例中的属性，也包括存在于原型中的属性。原型中不可枚举的属性（[[Enumerable]]标记为false）的实例属性也会在for-in中返回。
+Object.keys()----es5
+接收一个对象作为参数，取得对象上所有可枚举的实例属性，返回一个包含所有可枚举属性的字符串数组
+```
+var keys = Object.keys(Person.prototype)
+console.log(keys); // ['name', 'age', 'job', 'sayName'];
+
+var p1 = new Person();
+var p2 = new Person()
+
+p1.name = 'huanhuan';
+p1.age = 18;
+
+var p1keys = Object.keys(p1);
+var p2keys = Object.keys(p2);
+console.log(p1keys); // ['name', 'age']
+console.log(p2keys); // []
+```
+对实例调用Object.keys()只返回实例属性
+
+Object.getOwnPropertyNames()
+接收一个对象作为参数，取得所有实例属性，不论是否可枚举
+```
+var keys = Object.getOwnPropertyNames(Person.prototype);
+console.log(keys); // ['constructor', 'name', 'age', 'job', 'sayName'] 包含了不可枚举的constructor
+```
