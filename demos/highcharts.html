@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./libs/highcharts.js"></script>
+    <style>
+    .half-opacity {
+        opacity: .3;
+    }
+    .no-opacty {
+        opacity: 1;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="container" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+
+    <script>
+        var originData = []
+        function normalizing(arr) {
+            var data = [];
+            for (var i = 0, len = arr.length; i < len; i++) {
+                var cur = arr[i].data;
+                arr[i].visible = false;
+                var name = arr[i].name;
+                arr[i].showInLegend = false;
+                arr[i].name = 'dontshow';
+                var max = Math.max.apply(null, cur);
+                var min = Math.min.apply(null, cur);
+                var news = cur.map(function (x) {
+                    return (x - min) / max;
+                });
+                var item = { name: name, data: news };
+                arr.push(item)
+            }
+            return arr;
+        };
+        var datalist = [{
+            name: 'Installation',
+            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175, 65543, 77532, 111254, 43221, 55532, 112345]
+        }, {
+            name: 'Manufacturing',
+            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434, 32321, 112421, 66642, 88535, 33234, 44342]
+        }, {
+            name: 'Sales & Distribution',
+            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387, 32423, 54545, 77767, 22332, 65323, 76529]
+        }, {
+            name: 'Project Development',
+            data: [7777, 9999, 7988, 12169, 15112, 22452, 34400, 34227, 7731, 4442, 6666, 2213, 6753, 9975]
+        }, {
+            name: 'other',
+            data: [1, 1, 4, 2, 5, 6, 7, 4, 23, 5, 7, 33, 7, 1]
+        }, {
+            name: 'test',
+            data: [11, 12, 34, 26, 75, 46, 17, 34, 36, 75, 34, 99, 100, 3]
+        }];
+        var initSeries = normalizing(datalist);
+        originData = (function () {
+            var returnArr = [];
+            for (var i = 0, len = initSeries.length; i < len; i++) {
+                var item = initSeries[i].data;
+                var tmp = [];
+                item.forEach(function (element) {
+                    tmp.push(element)
+                }, this);
+                returnArr.push({ name: initSeries[i].name, data: tmp })
+            }
+            return returnArr;
+        }());
+        function adjustSeries(activeName) {
+            var data = chart.series;
+            var max, min;
+            for (var i = 0, len = 6; i < len; i++) {
+                var curName = data[i + 6].name
+                var current = data[i];
+                if (curName === activeName) {
+                    max = Math.max.apply(null, current.yData);
+                    min = Math.min.apply(null, current.yData);
+                }
+            }
+            for (var i = 6, len = originData.length; i < len; i++) {
+                var cur = originData[i].data || [];
+                var newc = cur.map(function (item, index) {
+                    var cnt = Math.round(item * max) + min;
+                    return cnt;
+                });
+                var upObj = { data: newc, lineWidth: 1, dashStyle: 'Dash', dataLabels: { enabled: false }, className: 'half-opacity' };
+                if (originData[i].name === activeName) {
+                    upObj = { data: newc, lineWidth: 4, dashStyle: 'Solid', dataLabels: { enabled: true }, className: 'no-opacity' }
+                }
+                chart.series[i].update(upObj);
+            }
+        };
+        var chart = Highcharts.chart('container', {
+
+            title: {
+                text: 'Solar Employment Growth by Sector, 2010-2016'
+            },
+            ignoreHiddenSeries: true,
+            subtitle: {
+                text: 'Source: thesolarfoundation.com'
+            },
+            yAxis: {
+                title: {
+                    text: 'Number of Employees'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    pointStart: 2010,
+                    cursor: 'pointer',
+                    marker: {
+                        radius: 3
+                    },
+                    events: {
+                        click: function (ev) {
+                            var activeName = this.options.name;
+                            adjustSeries(activeName)
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    var index = this.colorIndex < 6 ? this.colorIndex + 10 : this.colorIndex;
+                    var newSeries = chart.series[index - 6];
+                    var key = this.key;
+                    var xData = newSeries.xData || [];
+                    var yData = newSeries.yData || [];
+                    var keyIndex = xData.indexOf(key);
+                    var y = yData[keyIndex];
+                    return '<b>' + this.series.name + '</b> the value for <b>' + this.x +
+                        '</b> is <b>' + y + '</b>';
+                }
+            },
+
+            series: initSeries
+
+        });
+        adjustSeries('Manufacturing')
+    </script>
+</body>
+
+</html>
