@@ -271,9 +271,104 @@ var person = new Person('xiaojie', 24, 'fe'); // 必须使用new，不然属性�
 3.没有return
 另外，若构造函数当做函数调用
 1.如上，属性和方法被添加到window或global
-2.拎一个对象的作用域中调用
+2.另一个对象的作用域中调用
 ```
 var o = new Object();
 Person.call(o, 'xiaojie', 24, 'fe');
 o.sayName(); // 'xiaojie'
 构造函数的问题
+每个方法都在每个实例上重新创建了一遍
+```
+var person1 = new Person(xxxx);
+var person2 = new Person(yyyyy);
+person1.sayName === person2.name // false
+```
+- 原型模式 prototype
+可以让所有对象实例共享它所包含的属性和方法
+prototype属性是一个指针，指向一个包含可以由特定类型的所有实例共享的属性和方法的对象
+```
+function Person() {}
+var proto = Person.prototype;
+proto.name = 'xiaojie';
+proto.age = 24;
+proto.job = 'fe';
+proto.sayName = function () {
+    console.log(this.name);
+}
+var person1 = new Person();
+person1.sayName(); // 'xiaojie'
+
+var person2 = new Person();
+person2.sayName(); // 'xiaojie'
+
+person1.sayName === person2.sayName // true
+```
+1.理解原型对象(Person.prototype指向函数的原型对象)
+```
+Person.prototype.constructor === Person // true
+原型对象的construcor属性包含一个指向Person的指针
+person1.__proto__ === Person.prototype // true
+实例和构造函数没有直接关系，而是和构造函数的原型对象有关系
+```
+isPrototypeOf() 判断实例内部是否有指向原型对象的指针[[prototype]]
+Person.prototype.isPrototypeOf(person1) // true
+Object.getPrototypeOf() 返回[[prototype]]即__proto__的值
+Object.getPrototypeOf(person1) === Person.prototype // true
+Object.getPrototypeOf(person1.name); // 'xiaojie'
+当为实例添加一个属性，这个属性会屏蔽原型对象中保存的同名属性，但不会修改原型对象中属性的值；即使将添加的属性设置为null，也只能在实例中设置，不会恢复指向圆形的连接，得使用delete完全删除实例属性，才能重新访问原型中的属性
+```
+var person1 = new Person();
+var person2 = new Person();
+
+person1.name = 'huanhuan';
+console.log(person1.name) // 'huanhuan' 来自实例修改
+console.log(person2.name) // 'xiaojie' 来自原型对象
+person1.name = null;
+console.log(person1.name) // null 没有恢复指向原型对象
+delete person1.name;
+console.log(person1.name) // 'xiaojie' 恢复，来自原型对象
+```
+当代码读取某个对象的属性时，会进行搜索，先从实例对象本身开始，若找到则返回
+若没找到，则继续搜索指针指向的原型对象，找到了则返回
+
+hasOwnProperty()检测一个属性存在于实例中还是原型中
+```
+var person1 = new Person();
+var person2 = new Person();
+
+console.log(person1.hasOwnProperty('name')) // false
+person1.name = 'huanhuan';
+console.log(person1.hasOwnProperty('name')) // true 
+```
+只有当实例重写了name属性之后，hasOwnProperty()才返回true
+只有这时候name才是一个实例属性，而非源性属性
+2.原型与in操作符
+单独使用和在for-in中使用
+单独使用时，会在通过对象能够访问给定属性时返回true,无论该属性存在于实例还是原型
+for-in中一般和hasOwnProperty()一起使用。
+在使用 for-in 循环时，返回的是所有能够通过对象访问的、可枚举的（enumerated）属性，其中既包括存在于实例中的属性，也包括存在于原型中的属性。原型中不可枚举的属性（[[Enumerable]]标记为false）的实例属性也会在for-in中返回。
+Object.keys()----es5
+接收一个对象作为参数，取得对象上所有可枚举的实例属性，返回一个包含所有可枚举属性的字符串数组
+```
+var keys = Object.keys(Person.prototype)
+console.log(keys); // ['name', 'age', 'job', 'sayName'];
+
+var p1 = new Person();
+var p2 = new Person()
+
+p1.name = 'huanhuan';
+p1.age = 18;
+
+var p1keys = Object.keys(p1);
+var p2keys = Object.keys(p2);
+console.log(p1keys); // ['name', 'age']
+console.log(p2keys); // []
+```
+对实例调用Object.keys()只返回实例属性
+
+Object.getOwnPropertyNames()
+接收一个对象作为参数，取得所有实例属性，不论是否可枚举
+```
+var keys = Object.getOwnPropertyNames(Person.prototype);
+console.log(keys); // ['constructor', 'name', 'age', 'job', 'sayName'] 包含了不可枚举的constructor
+```
