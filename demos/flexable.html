@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flex demo</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        color: #333;
+        font-size: .9em
+    }
+    main {
+        flex: 1 0 auto;
+        display: flex;
+    }
+    aside {
+        flex: 0 0 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #f2f2f2;
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 auto;
+    }
+    .music-head {
+        flex: 0 0 260px;
+        display: flex;
+        padding: 30px;
+        box-sizing: border-box;
+        background-color: #4e4e4e;
+    }
+    .music-content {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        color: #f0f0f0;
+        padding-left: 50px;
+    }
+    .music-content div:first-child {
+        margin-bottom: auto;
+    }
+    .music-content p {
+        margin: 0;
+    }
+    .music-content div:first-child p:first-child {
+        font-size: 1.8em;
+        margin: 0 0 10px 0;
+    }
+    .music-content div:nth-child(2) .fa {
+        padding: 0 10px;
+    }
+    .music-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        padding: 5px 10px 0;
+    }
+    .music-list li {
+        flex: 1 0 50px;
+        display: flex;
+        padding: 0 5px;
+    }
+    li p {
+        flex: 0 0 25%;
+    }
+    li p:last-child {
+        border: 1px solid #555;
+        font-size: .6em;
+        flex-basis: auto;
+        box-sizing: border-box;
+        padding: 3px;
+    }
+    li:nth-child(2n) {
+        background-color: #f2f2f2;
+    }
+    footer{
+        flex: 0 0 90px;
+        display: flex;
+        padding: 10px;
+        color: #fff;
+        background-color: rgba(61, 100, 158, .9);
+        box-sizing: border-box;
+    }
+    .footer-left {
+        flex: 0 0 50%;
+        display: flex;
+
+    }
+    .footer-left img {
+        width: 70px;
+    }
+    .music-info {
+        display: flex;
+        flex: 1 0 auto;
+        padding-left: 10px;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .footer-right {
+        display: flex;
+        flex: 1 0 auto;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+    }
+    </style>
+</head>
+<body>
+    <main>
+        <aside>
+            <i class="fa fa-bars"></i>
+            <i class="fa fa-home"></i>
+            <i class="fa fa-search"></i>
+            <i class="fa fa-volume-up"></i>
+            <i class="fa fa-user"></i>
+            <i class="fa fa-spotify"></i>
+            <i class="fa fa-cog"></i>
+            <i class="fa fa-soundcloud"></i>
+        </aside>
+        <section class="content">
+            <div class="music-head">
+                <img src="./images/5768037999500472.jpg" alt="">
+                <section class="music-content">
+                    <div>
+                        <p>[ 治愈 ] 清风拂面绿草香</p>
+                        <p>散步/ 乡村/ 清新</p>
+                        <p>2017年9月3日17:22:34创建</p>
+                    </div>
+                    <div>
+                        <i class="fa fa-play"> 播放全部</i>
+                        <i class="fa fa-plus"> 添加</i>
+                        <i class="fa fa-ellipsis-h"> 更多</i>
+                    </div>
+                </section>
+            </div>
+            <ul class="music-list">
+                <li>
+                    <p>1.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>2.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>3.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>4.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>5.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>3.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>4.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>5.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li><li>
+                    <p>3.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>4.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+                <li>
+                    <p>5.继续</p>
+                    <p>03:33</p>
+                    <p>黄小珍</p>
+                    <p>花吃了那女孩</p>
+                </li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-left">
+            <img src="./images/5768037999500472.jpg" alt="">
+            <div class="music-info">
+                <p>继续</p>
+                <p>黄小珍</p>
+            </div>
+        </div>
+        <div class="footer-right">
+            <i class="fa fa-step-backward"></i>
+            <i class="fa fa-pause"></i>
+            <i class="fa fa-step-forward"></i>
+            <i class="fa fa-rotate-right"></i>
+            <i class="fa fa-random"></i>
+        </div>
+    </footer>
+</body>
+</html>
