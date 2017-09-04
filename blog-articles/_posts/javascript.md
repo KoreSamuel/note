@@ -372,3 +372,13 @@ Object.getOwnPropertyNames()
 var keys = Object.getOwnPropertyNames(Person.prototype);
 console.log(keys); // ['constructor', 'name', 'age', 'job', 'sayName'] 包含了不可枚举的constructor
 ```
+原型链的动态性
+
+对原型对象所做的任何修改都能够立即从实例上反映出来——即使是先创建了实例后修改原型也照样如此
+```
+var friend = new Person();
+Person.prototype.sayHi = function(){
+ alert("hi");
+};
+friend.sayHi(); //"hi"
+```
