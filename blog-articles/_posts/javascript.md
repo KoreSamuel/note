@@ -414,4 +414,42 @@ object.create()本质上讲，是对传入的对象进行了一次浅复制
 原型的一个副本而已。本质上，就是使用寄生式继承来继承超类型的原型，然后再将结果指定给子类型的原型。
 只调用一次超类型构造函数
 
-函数表达式
+## 函数表达式
+能够创建函数再赋值给变量，也能够把函数作为其他函数的值返回
+
+### 递归
+常规的递归方式
+```
+function factorial (num) {
+     return num <= 1 ? 1 : num * factorial(num - );
+}
+```
+
+若执行以下代码，则上述递归函数则会出现问题
+
+```
+var anotherfn = factorial;
+factorial = null;
+console.log(anotherfn(3)); // error,因为factorial赋值为null，则只有anotherfn指向函数，但是在函数内调用factorial，此时factorial已经不是函数，导致出错
+```
+
+在编写递归函数的时候，使用arguments.callee比直接使用函数名更保险。
+
+```
+function factorial (numm) {
+    return num <= 1 ? 1 : arguments.callee(num - 1);
+}
+```
+
+不过在严格模式下，不能访问arguments.callee。可以使用命名函数表达式来达成相同的效果
+
+```
+var factorial = (function f(num) {
+    return num <= 1 ? 1 : num * f(num - 1);
+});
+```
+
+### 闭包
+有权访问另一个函数作用域中的变量的函数，在一个函数内部创建另一个函数。
+
+
