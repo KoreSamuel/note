@@ -19,7 +19,7 @@ class EventEmitter {
     on(evnetName, listener) {
         if (!evnetName || !listener) return;
 
-        if (!isValidListener) {
+        if (!this.isValidListener) {
             throw new TypeError('listener must be a function');
         }
 
@@ -51,8 +51,8 @@ class EventEmitter {
         let ps;
         listeners.forEach((item, index) => {
             if (item && item.listener === listener) {
-                ps = i;
-                break;
+                ps = index;
+                return;
             }
         });
 
@@ -87,4 +87,4 @@ class EventEmitter {
         }
     }
 }
-export default EventEmitter;
+module.exports = EventEmitter;
