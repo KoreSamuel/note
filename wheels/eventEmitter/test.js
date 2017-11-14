@@ -1,4 +1,4 @@
-const EventEmitter = require('./index.js');
+const EventEmitter = require('./index.min.js');
 
 const emitter = new EventEmitter();
 
@@ -16,3 +16,11 @@ emitter.on('click', () => {
 
 emitter.emit('oncelog'); // 'log once'
 emitter.emit('click', ['I am clicked!']); // 'I am clicked!' 'hello'
+
+emitter.off('click', logdata);
+
+emitter.emit('click'); // 'hello'
+
+emitter.allOff();
+
+emitter.emit('click'); // 'there is no event named : click'
