@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+    <style>
+        #mycanvas {
+            display: block;
+            border: 1px solid #333;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <canvas id="mycanvas"></canvas>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            app.init();
+        });
+        let app = {
+            init: function () {
+                let canvas = document.getElementById('mycanvas')
+                let ctx = canvas.getContext('2d');
+                canvas.width = 800;
+                canvas.height = 600;
+                // this.drawLine();
+                // this.drawRect(ctx, 400, 100, 100, 50, 'yellow', 5, 'blue');
+                // this.linear(ctx);
+                // this.radial(ctx);
+                // this.pattern(ctx)
+                // this.draw2048(ctx);
+                // this.drawBezier(ctx);
+                this.draw3bezier(ctx);
+            },
+            drawLine: function () {
+                let canvas = document.getElementById('mycanvas');
+                canvas.width = 800;
+                canvas.height = 600;
+                let context = canvas.getContext('2d');
+
+                context.beginPath(); // 代表下次绘制的起始之处为beginPath()之后的代码
+                context.moveTo(100, 100);
+                context.lineTo(300, 300);
+                context.lineTo(100, 500);
+                context.lineWidth = 5;
+                context.strokeStyle = '#AA394C';
+                context.stroke();
+
+                context.beginPath();
+                context.moveTo(200, 100);
+                context.lineTo(400, 300);
+                context.lineTo(200, 500);
+                context.lineWidth = 5;
+                context.strokeStyle = 'yellow';
+                context.stroke();
+            },
+            drawRect: function (ctx, x, y, w, h, fc, bw, bc) {
+                ctx.rect(x, y, w, h);
+
+                ctx.fillStyle = fc;
+                ctx.lineWidth = bw;
+                ctx.strokeStyle = bc;
+                ctx.fill();
+                ctx.stroke();
+            },
+            linear: function (ctx) {
+                ctx.rect(200, 100, 400, 400);
+                // 创建
+                let grd = ctx.createLinearGradient(200, 300, 600, 300); // start_x, start_y, end_x, end_y
+                // 设置
+                grd.addColorStop(0, 'black');
+                grd.addColorStop(0.5, 'white');
+                grd.addColorStop(1, 'black');
+
+                ctx.fillStyle = grd;
+                // 应用
+                ctx.fill();
+            },
+            radial: function (ctx) {
+                let grd = ctx.createRadialGradient(400, 300, 100, 400, 300, 200); // ostart_x, ostart_y, ostart_r, o_end_x, o_end_y, o_end_r
+                grd.addColorStop(0, 'olive');
+                grd.addColorStop(0.25, 'maroon');
+                grd.addColorStop(0.5, 'aqua');
+                grd.addColorStop(0.75, 'fuchsia');
+                grd.addColorStop(0.25, 'teal');
+
+                ctx.fillStyle = grd;
+                ctx.fillRect(100, 100, 600 ,400);
+            },
+            pattern: function (ctx) {
+                let img = new Image();
+                img.src = '../images/5768037999500472.jpg';
+                img.onload = function() {
+                    let patt = ctx.createPattern(img, 'repeat');
+                    ctx.fillStyle = patt;
+                    ctx.fillRect(0, 0, 800, 600);
+                }
+            },
+            draw2048: function(ctx) {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, 800, 600);
+
+                this._drawRoundRect(ctx, 200, 100, 400, 400, 5);
+
+                ctx.fillStyle = '#aa7b41';
+                ctx.strokeStyle = '#0078aa';
+                ctx.stroke();
+                ctx.fill();
+
+                let N = 4;
+                for (let i = 1; i <= N; i++) {
+                    for (let j = 1; j <= N; j++) {
+                        this._drawRoundRect(ctx, 200 + 16 * i + 80 * (i - 1), 100 + 16 * j + 80 * (j - 1), 80, 80, 5);
+                        ctx.fillStyle = '#ccbfb4';
+                        ctx.strokeStyle = '#0078aa';
+                        ctx.stroke();
+                        ctx.fill();
+                    }
+                }
+            },
+            _drawRoundRect: function(ctx, x, y, w, h, r) {
+                const pi = Math.PI;
+                ctx.beginPath();
+                ctx.arc(x + r, y + r, r, pi, pi * 1.5);
+                ctx.lineTo(w - r + x, y);
+                ctx.arc(x + w - r, y + r, r, pi * 1.5, 2 * pi);
+                ctx.lineTo(x + w, y + h - r);
+                ctx.arc(w - r + x, h - r + y, r, 0, 0.5 * pi);
+                ctx.lineTo(x + r, y + h);
+                ctx.arc(x + r, y + h - r, r, 0.5 * pi, pi);
+                // ctx.lineTo(x, y + r); // 可有可无
+                ctx.closePath();                
+            },
+            drawBezier: function (ctx) {
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = "#333";
+                ctx.beginPath();
+                ctx.moveTo(175, 369);
+                ctx.quadraticCurveTo(264, 131, 367, 351);
+                ctx.stroke();
+            },
+            draw3bezier: function(ctx) {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, 800, 600);
+
+                this._drawPrairie(ctx);
+                this._drawSky(ctx);
+
+                for (let i = 0; i < 5; i++) {
+                    let x0 = 500 * Math.random() + 50;
+                    let y0 = 200 * Math.random() + 50;
+                    let c0 = 100 * Math.random() + 50;
+                    this._drawCloud(ctx, x0, y0, c0);
+                }
+            },
+            _drawPrairie: function(ctx) {
+                ctx.save();
+
+                ctx.beginPath();
+                ctx.moveTo(0, 420);
+                ctx.bezierCurveTo(250, 300, 350, 550, 800, 400);
+                ctx.lineTo(800, 600);
+                ctx.lineTo(0, 600);
+                ctx.closePath();
+
+                let lineStyle = ctx.createLinearGradient(0, 600, 600, 0);
+                lineStyle.addColorStop(0, '#00aa58');
+                lineStyle.addColorStop(0.3, '#63aa7b');
+                lineStyle.addColorStop(1, '#04aa00');
+
+                ctx.fillStyle = lineStyle;
+                ctx.fill();
+
+                ctx.restore();
+            },
+            _drawSky: function(ctx) {
+                ctx.save();
+                
+                ctx.beginPath();
+                ctx.moveTo(0, 420);
+                ctx.bezierCurveTo(250, 300, 350, 550, 800, 400);
+                ctx.lineTo(800, 0);
+                ctx.lineTo(0, 0);
+                ctx.closePath();
+
+                let lineStyle = ctx.createLinearGradient(400, 0, 50, 400, 0, 200);
+                lineStyle.addColorStop(0, '#42a9aa');
+                lineStyle.addColorStop(1, '#2491aa');
+
+                ctx.fillStyle = lineStyle;
+                ctx.fill();
+
+                ctx.restore();
+            },
+            _drawCloud: function (ctx, cx, cy, cw) {
+                let MAX_WIDTH = 800;
+                cx = cx % MAX_WIDTH;
+                let ch = cw * 0.6;
+                ctx.beginPath();
+                ctx.fillStyle = '#fff';
+
+                let grd = ctx.createLinearGradient(0, 0, 0, cy);
+                grd.addColorStop(0, 'rgba(255,255,255,.8)');
+                grd.addColorStop(1, 'rgba(255,255,255,.5');
+                ctx.fillStyle = grd;
+
+                ctx.arc(cx, cy, cw * 0.19, 0, 360);
+                ctx.arc(cx + cw * 0.08, cy - ch * 0.3, cw * 0.11, 0, 360);
+                ctx.arc(cx + cw * 0.3, cy - ch * 0.25, cw * 0.25, 0, 360);
+                ctx.arc(cx + cw * 0.6, cy, cw * 0.21, 0, 360);
+                ctx.arc(cx + cw * 0.3, cy - ch * 0.1, cw * 0.28, 0, 360);
+                
+                ctx.closePath();
+                ctx.fill();
+            }
+        };
+    </script>
+</body>
+
+</html>
