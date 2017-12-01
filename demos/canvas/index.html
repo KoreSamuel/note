@@ -35,7 +35,9 @@
                 // this.pattern(ctx)
                 // this.draw2048(ctx);
                 // this.drawBezier(ctx);
-                this.draw3bezier(ctx);
+                // this.draw3bezier(ctx);
+                // this._translate(ctx);
+                this._rotate(ctx);
             },
             drawLine: function () {
                 let canvas = document.getElementById('mycanvas');
@@ -217,7 +219,46 @@
                 
                 ctx.closePath();
                 ctx.fill();
-            }
+            },
+            _translate: function (ctx) {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, 800, 600);
+
+                ctx.fillStyle = '#ff00ff';
+                ctx.fillRect(0, 0, 200, 100);
+
+                /* 
+                 * 在涉及图形变换时。一定要以最初状态为最根本的参照物
+                 * 所以每次需要有save保存状态和restore恢复之前状态
+                 */
+                
+                ctx.save();
+                ctx.fillStyle = '#00ff00';
+                ctx.translate(100, 100); // 相当于将坐标轴远点移动到(100, 100)
+                ctx.fillRect(0, 0, 200, 100);
+                ctx.restore();
+
+                ctx.save();
+                ctx.fillStyle = '#0000ff';
+                ctx.translate(200, 200); // 如果没有save/restore，此时相对的是(100,100)移动(200,200)即(300, 300)
+                ctx.fillRect(0, 0, 200, 100);
+                ctx.restore();
+            },
+            _rotate: function(ctx) {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, 800, 600);
+
+                for (let i = 1; i <= 10; i++) {
+                    ctx.save();
+                    ctx.translate(400, 300); // 需要每次都把坐标轴定位到中心
+                    ctx.rotate(36 * i * Math.PI / 180); // 10个正方形，每个旋转36°，一次递增
+                    ctx.fillStyle = "rgba(255, 0, 0, 0.25)";
+                    ctx.fillRect(0, -200, 200, 200); // y轴上取正方形左侧中点
+                    ctx.restore();
+                }
+            },
+            // scale(x, y) scale(2, 2)为放大两倍，缩放时，图像左上角坐标的位置也会对应缩放。
+            
         };
     </script>
 </body>
