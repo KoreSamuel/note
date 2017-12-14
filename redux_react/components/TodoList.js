@@ -1,9 +1,17 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Todo from './Todo';
 
-const TodoList = ({ todos, onTodoClick }) => {
-    <ul>{todos.map(todo => <Todo key={todo.id} {...todo} onClick={() => onTodoClick(todo.id)} />)}</ul>;
-};
+export default class TodoList extends Component {
+    render() {
+        return (
+            <ul>
+                {this.props.todos.map((todo, index) => 
+                    <Todo key={index} {...todo} onClick={() => this.props.onTodoClick(index)} />
+                )}
+            </ul>
+        )
+    }
+}
 
 TodoList.prototypes = {
     todos: PropTypes.arrayOf(
@@ -15,5 +23,3 @@ TodoList.prototypes = {
     ).isRequired,
     onTodoClick: PropTypes.func.isRequired
 };
-
-export default TodoList;
